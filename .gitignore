@@ -1,2 +1,12 @@
 # virtual env
 catt
+
+# ignore the logs
+logs
+
+# trash generated
+config/__init__.py
+models/__pycache__/DepthEstimationModel.cpython-312.pyc
+utils/__pycache__/__init__.cpython-312.pyc
+utils/__pycache__/common_functions.cpython-312.pyc
+utils/__pycache__/logger.cpython-312.pyc
