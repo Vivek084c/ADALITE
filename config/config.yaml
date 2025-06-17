@@ -1,0 +1,11 @@
+model_training:
+  EPOCHS : 50
+  BATCH_SIZE : 16
+  LEARNING_RATE : 3e-4
+  LOG_INTERVAL : 500
+  CHECKPOINT_DIR : "./checkpoints"
+  SOFTLABEL : 'softlabels.h5'
+  IMAGE_SIZE : [256,256,3]
+  TRAIN_VAL_SPLIT : 0.8
+  
+  
