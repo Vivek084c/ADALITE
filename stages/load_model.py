@@ -23,7 +23,7 @@ class TeacherModel:
         logger.info("Done --> Reading the YAML file")
     
     def load_student_model(self):
-
+        pass
 
 
 if __name__ == "__main__":

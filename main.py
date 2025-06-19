@@ -1,4 +1,4 @@
-from stages.data_ingestion import download_data
+from stages.data_ingestion import download_data, download_teacher_model
 from stages.load_model import MODEL
 
 from utils.logger import get_logger
@@ -20,15 +20,19 @@ logger.info("Done  --> Loading the yaml file")
 #     )
 # logger.info(f"Done --> Data Ingestion ")
 
+
+
+# # ################################# WORKING FILE #################################
+# logger.info("Start -> Downloading the TEACHER Model")
+# model_path = download_teacher_model(config["teacher_model"]["target_folder"])
+# logger.info(f"Done -> Downloading the TEACHER Model to {model_path}")
+
+
 # ################################# WORKING FILE #################################
 # logger.info(f"Start --> Loading the model ")
 # obj = MODEL("config/config.yaml")
 # model = obj.load_model()
 # logger.info(f"Done --> Loading the model ")
-
-logger.info("Start -> Loading the TEACHER Model")
-
-logger.info("Done -> Loading the TEACHER Model")
 
 
 
