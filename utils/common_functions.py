@@ -8,6 +8,9 @@ import pandas as pd
 import zipfile
 import os
 import gdown
+import tensorflow as tf
+import h5py
+import numpy as np
 
 logger = get_logger(__name__)
 
@@ -106,6 +109,24 @@ def delete_zip_file(zip_path):
     else:
         logger.info(f"File not found or not a zip: {zip_path}")
         return False
+    
+def save_tenosr_to_h5(input_image, output_image, filename, output_path):
+    if isinstance(input_image, tf.Tensor):
+        input_image = input_image.numpy()
+    
+    if isinstance(output_image, tf.Tensor):
+        output_image = output_image.numpy()
+    
+    with h5py.File(output_path, 'a') as hf:
+        # Create a group for each entry (use filename as the group name)
+        if filename in hf:
+            print(f"Skipping {filename}: already exists in H5 file.")
+            return
+
+        grp = hf.create_group(filename)
+        grp.create_dataset("input_image", data=input_image)
+        grp.create_dataset("output_image", data=output_image)
+        grp.create_dataset("filename", data=np.bytes_(filename))
 # def load_data(path):
 #         """
 #         function to load the data from a given path
