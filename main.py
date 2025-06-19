@@ -26,6 +26,10 @@ logger.info("Done  --> Loading the yaml file")
 # model = obj.load_model()
 # logger.info(f"Done --> Loading the model ")
 
+logger.info("Start -> Loading the TEACHER Model")
+
+logger.info("Done -> Loading the TEACHER Model")
+
 
 
 

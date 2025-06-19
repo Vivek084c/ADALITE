@@ -523,5 +523,9 @@ class DEPTH_MODEL:
     def summary(self):
         return self.model.summary()
     
+class TEACHER_MODEL:
+    def __init__(self):
+    
+    
 if __name__ == "__main__":
     pass
