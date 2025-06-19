@@ -111,14 +111,14 @@ logger.info(f"Done --> Training the Model")
 
 
 # # ################################# saving the model  #################################
-logger.info(f"Start --> saving the model to path : {config["model_training"]["save_trained_model_dir"]}")
-STUDENT_MODEL_NEW.export(config["model_training"]["save_trained_model_dir"])
-logger.info(f"Done --> saving the model : {config["model_training"]["save_trained_model_dir"]}")
+logger.info(f"Start --> saving the model to path : {config['model_training']['save_trained_model_dir']}")
+STUDENT_MODEL_NEW.export(config['model_training']['save_trained_model_dir'])
+logger.info(f"Done --> saving the model : {config['model_training']['save_trained_model_dir']}")
 
 
-logger.info(f"Start --> saving the tflite model to path : {config["model_training"]["save_trained_model_tflite_dir"]}")
-model_paht = convert_and_save_tflite(config["model_training"]["save_trained_model_dir"], config["model_training"]["save_trained_model_tflite_dir"])
-logger.info(f"Done --> saving the tflite model to path : {config["model_training"]["save_trained_model_tflite_dir"]}")
+logger.info(f"Start --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")
+model_paht = convert_and_save_tflite(config["model_training"]['save_trained_model_dir'], config['model_training']['save_trained_model_tflite_dir'])
+logger.info(f"Done --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")
 
 
 
