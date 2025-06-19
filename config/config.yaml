@@ -7,14 +7,16 @@ teacher_model:
 data_generation:
   SOFTLABEL_DIR : "softlabels.h5"
 model_training:
-  EPOCHS : 50
+  EPOCHS : 1
   BATCH_SIZE : 10
   LEARNING_RATE : 3e-4
-  LOG_INTERVAL : 500
+  LOG_INTERVAL : 10
   CHECKPOINT_DIR : "./checkpoints"
   SOFTLABEL : 'softlabels.h5'
   IMAGE_SIZE : [256,256,3]
   IMAGE_SIZE__ : [256,256]
   TRAIN_VAL_SPLIT : 0.8
+  save_trained_model_dir: "models_trained/"
+  save_trained_model_tflite_dir : "models_trained_tflite/"
   
   

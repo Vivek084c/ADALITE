@@ -1,5 +1,9 @@
 import tensorflow as tf
 import os
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
 # Custom Cyclical Learning Rate Scheduler
 class CyclicalLearningRate(tf.keras.optimizers.schedules.LearningRateSchedule):
     def __init__(self, initial_lr, max_lr, step_size):
@@ -17,6 +21,7 @@ class CyclicalLearningRate(tf.keras.optimizers.schedules.LearningRateSchedule):
 
 def func_configure_optimizer_metrics_checkpoints(TOTAL_IMGS, BATCH_SIZE, STUDENT_MODEL, CHECKPOINT_DIR):
     # Define your values
+    logger.info(f"Start --> setup for optimizer, lr_schduler and chekcpoints")
     initial_lr = 1e-5
     max_lr = 3e-4
     steps_per_epoch = TOTAL_IMGS//BATCH_SIZE
@@ -53,5 +58,6 @@ def func_configure_optimizer_metrics_checkpoints(TOTAL_IMGS, BATCH_SIZE, STUDENT
         checkpoint, directory=os.path.join(CHECKPOINT_DIR, "best"), max_to_keep=2
     )
 
+    logger.info(f"Done --> setup for optimizer, lr_schduler and chekcpoints")
 
-    return lr_schedule, optimizer, train_metric, val_metric
+    return lr_schedule, optimizer, train_metric, val_metric, checkpoint_manager_last, checkpoint_manager_best

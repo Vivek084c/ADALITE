@@ -6,13 +6,15 @@ logger = get_logger(__name__)
 
 class DEPTH_MODEL(tf.keras.Model):
     def __init__(self, input_shape):
+        super(DEPTH_MODEL, self).__init__()
         logger.info(f"Start --> Creating DEPTH_MODEL with shape of {input_shape}")
         self.input_shape = input_shape
         logger.info(f"Done --> Creating DEPTH_MODEL with shape of {input_shape}")
         logger.info(f"Start --> Loading DEPTH_MODEL with shape of {input_shape}")
         self.model = self.build_model(self.input_shape)
         logger.info(f"Done --> Loading DEPTH_MODEL with shape of {input_shape}")
-
+    def call(self, x):
+        return self.model(x)
     def build_model(self, shape):
         # Input_block block 
         input_layers = layers.Input(shape = shape)

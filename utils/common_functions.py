@@ -128,7 +128,58 @@ def save_tenosr_to_h5(input_image, output_image, filename, output_path):
         grp.create_dataset("output_image", data=output_image)
         grp.create_dataset("filename", data=np.bytes_(filename))
 
+
+def silog_loss(y_true, y_pred, mask=None, lam=0.85, eps=1e-6):
+    """
+    Scale-invariant logarithmic loss for depth estimation with optional mask.
+
+    Args:
+        y_true: Tensor, reference depth map [batch, H, W, 1]
+        y_pred: Tensor, predicted depth map [batch, H, W, 1]
+        mask: Tensor of booleans [batch, H, W, 1] or [batch, H, W], optional
+        lam: float, scale-invariant balancing factor
+        eps: small number to avoid log(0)
+
+    Returns:
+        Scalar tensor: SiLog loss value
+    """
+    # Compute log difference
+    log_diff = tf.math.log(y_pred + eps) - tf.math.log(y_true + eps)
+
+    if mask is not None:
+        mask = tf.cast(mask, tf.float32)
+        log_diff = log_diff * mask
+
+        # Compute number of valid pixels to normalize properly
+        valid_pixels = tf.reduce_sum(mask)
+        mse_log = tf.reduce_sum(tf.square(log_diff)) / (valid_pixels + eps)
+        mean_log = tf.reduce_sum(log_diff) / (valid_pixels + eps)
+    else:
+        mse_log = tf.reduce_mean(tf.square(log_diff))
+        mean_log = tf.reduce_mean(log_diff)
+
+    mean_log_sq = tf.square(mean_log)
+    silog = tf.sqrt(mse_log - lam * mean_log_sq) * 10.0
+
+    return silog
+
+
+def convert_and_save_tflite(model_dir, tflite_path):
+    # ✅ Point to the folder you got from model.export()
+    converter = tf.lite.TFLiteConverter.from_saved_model(model_dir)
+
+    # (Optional) Add optimization:
+    # converter.optimizations = [tf.lite.Optimize.DEFAULT]
+
+    # Convert:
+    tflite_model = converter.convert()
+
     
+    # Save it:
+    with open("model.tflite", "wb") as f:
+        f.write(tflite_model)
+        logger.info(f"Saved the tflite model : model.tflite")
+    return "model.tflite"
 # def load_data(path):
 #         """
 #         function to load the data from a given path

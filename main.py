@@ -1,9 +1,12 @@
 from stages.data_ingestion import download_data, download_teacher_model
 from stages.load_model import MODEL, TeacherModel, configure_gpu
 from stages.generate_dataset import GENERATE_DATA, create_dataset
+from stages.model_training import start_train
 from stages.configure_optimizer_metrices import func_configure_optimizer_metrics_checkpoints
 from utils.logger import get_logger
 from utils.common_functions import read_yaml
+from utils.train_val_function import train_step, val_step
+from utils.common_functions import convert_and_save_tflite
 logger = get_logger(__name__)
 
 
@@ -78,7 +81,7 @@ logger.info(f"Done --> Loading the dataest total images found : {total_images}")
 
 # # ################################# configure optimizer metric and checkpoint #################################
 logger.info(f"Start --> Configuring the optimizer, metric and checkpoints")
-lr_schedule, optimizer, train_metric, val_metric = func_configure_optimizer_metrics_checkpoints(
+lr_schedule, optimizer, train_metric, val_metric, checkpoint_manager_last, checkpoint_manager_best= func_configure_optimizer_metrics_checkpoints(
     TOTAL_IMGS= total_images,
     BATCH_SIZE= config["model_training"]["BATCH_SIZE"],
     STUDENT_MODEL= model,
@@ -88,7 +91,37 @@ logger.info(f"Done --> Configuring the optimizer, metric and checkpoints")
 
 
 
-# # ################################# configure optimizer metric and checkpoint #################################
+# # ################################# Start training  #################################
+logger.info(f"Start --> Training the Model")
+STUDENT_MODEL_NEW = start_train(
+        EPOCHS = config["model_training"]["EPOCHS"],
+        train_metric = train_metric,
+        val_metric = val_metric,
+        train_ds = train_ds,
+        LOG_INTERVAL = config["model_training"]["LOG_INTERVAL"],
+        optimizer = optimizer,
+        checkpoint_manager_best =checkpoint_manager_best,
+        checkpoint_manager_last = checkpoint_manager_last,
+        val_ds = val_ds,
+        STUDENT_MODEL = model,
+        train_step= train_step,
+        val_step=  val_step
+        )
+logger.info(f"Done --> Training the Model")
+
+
+# # ################################# saving the model  #################################
+logger.info(f"Start --> saving the model to path : {config["model_training"]["save_trained_model_dir"]}")
+STUDENT_MODEL_NEW.export(config["model_training"]["save_trained_model_dir"])
+logger.info(f"Done --> saving the model : {config["model_training"]["save_trained_model_dir"]}")
+
+
+logger.info(f"Start --> saving the tflite model to path : {config["model_training"]["save_trained_model_tflite_dir"]}")
+model_paht = convert_and_save_tflite(config["model_training"]["save_trained_model_dir"], config["model_training"]["save_trained_model_tflite_dir"])
+logger.info(f"Done --> saving the tflite model to path : {config["model_training"]["save_trained_model_tflite_dir"]}")
+
+
+
 
 
 
