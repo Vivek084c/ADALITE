@@ -7,6 +7,7 @@ from utils.logger import get_logger
 from utils.common_functions import read_yaml
 from utils.train_val_function import train_step, val_step
 from utils.common_functions import convert_and_save_tflite
+import tensorflow as tf
 logger = get_logger(__name__)
 
 
@@ -15,14 +16,14 @@ config = read_yaml("config/config.yaml")
 logger.info("Done  --> Loading the yaml file")
 
 
-# ################################# Download the image data #################################
-# logger.info(f"Start --> Data Ingestion ")
-# download_data(
-#     image_url = config["data_ingestion"]["image_url"] ,
-#     destination = config["data_ingestion"]["destination_path"] ,
-#     image_file_name = config["data_ingestion"]["image_file_name"]
-#     )
-# logger.info(f"Done --> Data Ingestion ")
+################################# Download the image data #################################
+logger.info(f"Start --> Data Ingestion ")
+download_data(
+    image_url = config["data_ingestion"]["image_url"] ,
+    destination = config["data_ingestion"]["destination_path"] ,
+    image_file_name = config["data_ingestion"]["image_file_name"]
+    )
+logger.info(f"Done --> Data Ingestion ")
 
 
 # # ################################# Configure tenorflow to use GPU #################################
