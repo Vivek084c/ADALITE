@@ -22,10 +22,13 @@ def generate_data(
     output_shape = output_details[0]['shape']
     outputHeight = output_shape[1]
     outputWidth = output_shape[2]
-
+    
     logger.info(f"Start --> Data generation using Teacher Model "
                 f"(Input: {input_shape}, H={inputHeight}, W={inputWidth}; "
                 f"Output: {output_shape}, H={outputHeight}, W={outputWidth})")
+    #made changes
+    # Make sure the image folder exists
+    os.makedirs(IMAGE_PATH, exist_ok=True)    
     # imagePath = "midas/img/image.jpg"
     list_of_img = sorted([f for f in os.listdir(IMAGE_PATH) if f.endswith('.png')])
     logger.info(f"total images found  {len(list_of_img)}")
