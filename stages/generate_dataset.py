@@ -35,7 +35,7 @@ def create_dataset(
     logger.info("Start --> Data preprocessing and train val data generation")
     if not os.path.exists(softlabel_dir):
         logger.info(f"No softlabel file found: {softlabel_dir}")
-        return None, None
+        return None, None, 0
 
     # Read keys only (no big arrays yet)
     with h5py.File(softlabel_dir, 'r') as hf:
