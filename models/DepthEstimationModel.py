@@ -4,7 +4,7 @@ from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-class DEPTH_MODEL:
+class DEPTH_MODEL(tf.keras.Model):
     def __init__(self, input_shape):
         logger.info(f"Start --> Creating DEPTH_MODEL with shape of {input_shape}")
         self.input_shape = input_shape

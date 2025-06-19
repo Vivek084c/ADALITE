@@ -8,12 +8,13 @@ data_generation:
   SOFTLABEL_DIR : "softlabels.h5"
 model_training:
   EPOCHS : 50
-  BATCH_SIZE : 16
+  BATCH_SIZE : 10
   LEARNING_RATE : 3e-4
   LOG_INTERVAL : 500
   CHECKPOINT_DIR : "./checkpoints"
   SOFTLABEL : 'softlabels.h5'
   IMAGE_SIZE : [256,256,3]
+  IMAGE_SIZE__ : [256,256]
   TRAIN_VAL_SPLIT : 0.8
   
   
