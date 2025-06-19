@@ -1,0 +1,29 @@
+name: Build and Run Pipeline in Docker
+
+on:
+  push:
+    branches:
+      - main  # Trigger only on pushes to main branch (change if needed)
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t my-pipeline .
+
+    - name: Run pipeline inside Docker
+      run: |
+        docker run --rm my-pipeline
+
+    - name: Show container logs
+      if: always()
+      run: echo "Pipeline completed."
