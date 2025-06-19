@@ -14,3 +14,11 @@ utils/__pycache__/logger.cpython-312.pyc
 
 #dataset 
 data_download
+.DS_Store
+softlabels.h5
+models/.DS_Store
+models/midas/1.tflite
+stages/__pycache__/data_ingestion.cpython-312.pyc
+stages/__pycache__/generate_dataset.cpython-312.pyc
+stages/__pycache__/load_model.cpython-312.pyc
+utils/__pycache__/data_loader.cpython-312.pyc
