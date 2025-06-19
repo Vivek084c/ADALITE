@@ -1,3 +1,7 @@
+data_ingestion:
+  image_url : "https://drive.google.com/file/d/1VD_3uLo9dpgC-wr91CG6Vx58crX__5S9/view?usp=sharing"
+  destination_path : "data_download/img"
+  image_file_name : "images.zip"
 model_training:
   EPOCHS : 50
   BATCH_SIZE : 16
