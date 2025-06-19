@@ -23,7 +23,6 @@ stages/__pycache__/generate_dataset.cpython-312.pyc
 stages/__pycache__/load_model.cpython-312.pyc
 utils/__pycache__/data_loader.cpython-312.pyc
 model.tflite
-requirements.txt
 checkpoints/best/checkpoint
 checkpoints/best/ckpt-1.data-00000-of-00001
 checkpoints/best/ckpt-1.index
