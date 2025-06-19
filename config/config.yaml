@@ -4,6 +4,8 @@ data_ingestion:
   image_file_name : "images.zip"
 teacher_model:
   target_folder : "models/midas"
+data_generation:
+  SOFTLABEL_DIR : "softlabels.h5"
 model_training:
   EPOCHS : 50
   BATCH_SIZE : 16

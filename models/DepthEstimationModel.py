@@ -523,9 +523,69 @@ class DEPTH_MODEL:
     def summary(self):
         return self.model.summary()
     
-# class TEACHER_MODEL:
-#     def __init__(self):
+class TEACHER_MODEL:
+    def __init__(self, model_path):
+        logger.info("Start -> Loading the teacher model")
+        self.model_path = model_path
+        logger.info("Start -> building the teacher model")
+        self.interpreted, self.input_details, self.output_details = self.build_model()
+        logger.info("Done -> building the teacher model")
+        logger.info("Done -> building the teacher model")
+
+    def build_model(self):
+        try:
+            from tflite_runtime.interpreter import Interpreter
+        except:
+            from tensorflow.lite.python.interpreter import Interpreter
+            
+        print(f"Stating the data generation ")
+        interpreted = Interpreter(model_path= self.model_path , num_threads=4)
+        interpreted.allocate_tensors()
+
+        #### get the details
+        input_details = interpreted.get_input_details()
+        input_shape = input_details[0]['shape']
+        inputHeight = input_shape[1]
+        inputWidth = input_shape[2]
+        channels = input_shape[3]
+
+        output_details = interpreted.get_output_details()
+        output_shape = output_details[0]['shape']
+        outputHeight = output_shape[1]
+        outputWidth = output_shape[2]
+
+        return interpreted, input_details, output_details
     
+    
+        
     
 if __name__ == "__main__":
-    pass
+        # try:
+        #     from tflite_runtime.interpreter import Interpreter
+        # except:
+        #     from tensorflow.lite.python.interpreter import Interpreter
+            
+        # print(f"Stating the data generation ")
+        # interpreted = Interpreter(model_path= "models/midas/1.tflite" , num_threads=4)
+        # interpreted.allocate_tensors()
+
+        # #### get the details
+        # input_details = interpreted.get_input_details()
+        # input_shape = input_details[0]['shape']
+        # inputHeight = input_shape[1]
+        # inputWidth = input_shape[2]
+        # channels = input_shape[3]
+
+        # output_details = interpreted.get_output_details()
+        # output_shape = output_details[0]['shape']
+        # outputHeight = output_shape[1]
+        # outputWidth = output_shape[2]
+
+        # print("\n=== Inputs ===")
+        # for i, d in enumerate(input_details):
+        #     print(f"[{i}] name: {d['name']}, shape: {d['shape']}, dtype: {d['dtype']}")
+
+        # print("\n=== Outputs ===")
+        # for i, d in enumerate(output_details):
+        #     print(f"[{i}] name: {d['name']}, shape: {d['shape']}, dtype: {d['dtype']}")
+        pass

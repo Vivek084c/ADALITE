@@ -1,6 +1,6 @@
 from utils.logger import get_logger
 from utils.common_functions import read_yaml, save_tenosr_to_h5
-from models.DepthEstimationModel import DEPTH_MODEL
+from models.DepthEstimationModel import DEPTH_MODEL, TEACHER_MODEL
 
 logger = get_logger(__name__)
 
@@ -22,8 +22,11 @@ class TeacherModel:
         self.config = read_yaml(config_path)
         logger.info("Done --> Reading the YAML file")
     
-    def load_student_model(self):
-        pass
+    def load_teacher_model(self, model_path):
+        logger.info(f"Start --> loading the teacher model")
+        model = TEACHER_MODEL(model_path)
+        logger.info("Done -> loading the teacher model")
+        return model
 
 
 if __name__ == "__main__":

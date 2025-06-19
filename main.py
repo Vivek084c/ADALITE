@@ -1,5 +1,6 @@
 from stages.data_ingestion import download_data, download_teacher_model
-from stages.load_model import MODEL
+from stages.load_model import MODEL, TeacherModel
+from stages.generate_dataset import GENERATE_DATA
 
 from utils.logger import get_logger
 from utils.common_functions import read_yaml
@@ -11,7 +12,7 @@ config = read_yaml("config/config.yaml")
 logger.info("Done  --> Loading the yaml file")
 
 
-# ################################# WORKING FILE #################################
+# ################################# Download the image data #################################
 # logger.info(f"Start --> Data Ingestion ")
 # download_data(
 #     image_url = config["data_ingestion"]["image_url"] ,
@@ -22,17 +23,40 @@ logger.info("Done  --> Loading the yaml file")
 
 
 
-# # ################################# WORKING FILE #################################
+# # ################################# Downloading the teacher model #################################
 # logger.info("Start -> Downloading the TEACHER Model")
 # model_path = download_teacher_model(config["teacher_model"]["target_folder"])
 # logger.info(f"Done -> Downloading the TEACHER Model to {model_path}")
 
 
-# ################################# WORKING FILE #################################
+
+# # # ################################# Loading the teacher model #################################
+# logger.info(f"Start --> Loading the teacher model")
+# obj = TeacherModel("config/config.yaml")
+# student_model = obj.load_teacher_model(model_path)
+# interpreted, input_details, output_details = student_model.build_model()
+# logger.info(f"Done --> Loading the teacher model")
+
+
+
+# ################################# Loading the studen modell #################################
 # logger.info(f"Start --> Loading the model ")
 # obj = MODEL("config/config.yaml")
 # model = obj.load_model()
 # logger.info(f"Done --> Loading the model ")
+
+
+# # ################################# Load the dataset #################################
+# logger.info(f"Started the data generation")
+# GENERATE_DATA(
+#     IMAGE_PATH = config["data_ingestion"]["destination_path"],
+#     interpreted= interpreted,
+#     input_details= input_details,
+#     output_details= output_details,
+#     SOFTLABEL_DIR= config["data_generation"]["SOFTLABEL_DIR"]
+# )
+
+
 
 
 
