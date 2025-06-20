@@ -11,9 +11,14 @@ import tensorflow as tf
 logger = get_logger(__name__)
 
 
+
+
+
 logger.info("Start --> Loading the yaml file")
 config = read_yaml("config/config.yaml")
 logger.info("Done  --> Loading the yaml file")
+
+
 
 
 ################################# Download the image data #################################
