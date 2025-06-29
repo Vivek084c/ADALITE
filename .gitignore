@@ -36,3 +36,5 @@ models_trained/variables/variables.index
 stages/__pycache__/configure_optimizer_metrices.cpython-312.pyc
 stages/__pycache__/model_training.cpython-312.pyc
 utils/__pycache__/train_val_function.cpython-312.pyc
+actual_depth.mp4
+depth.mp4

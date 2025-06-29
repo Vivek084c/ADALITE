@@ -1,13 +1,7 @@
 # ADALITE: Depth Estimation Pipeline
-<video width="480" controls>
-  <source src="depth.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Depth Prediction](assets/depth.gif)
 
-<video width="480" controls>
-  <source src="actual_depth.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Actual Depth Prediction](assets/actual_depth.gif)
 
 ## What We Are Doing
 
