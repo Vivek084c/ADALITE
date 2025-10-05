@@ -1,3 +1,4 @@
+from logging import config
 import numpy as np
 import tflite_runtime.interpreter as tflite
 import cv2
@@ -8,8 +9,13 @@ import signal
 import mmap
 import fcntl
 
-# Import Picamera2 for camera module 3
-from picamera2 import Picamera2
+# Import Picamera2 for camera module 3 support
+# This may not be available in all environments, so we handle the ImportError gracefully
+try:
+    from picamera2 import Picamera2
+except ImportError:
+    Picamera2 = None
+    print("⚠️ Picamera2 not available in this environment. Camera features disabled.")
 
 # Ensure matplotlib is used in headless mode and then import necessary components
 import matplotlib
@@ -70,7 +76,8 @@ def cleanup_handler(signum=None, frame=None):
 
 # --- Configuration ---
 # Model path is absolute as provided in the original script
-MODEL_PATH = "ADALITE_TFLITE.tflite" 
+# MODEL_PATH = "ADALITE_TFLITE.tflite" 
+MODEL_PATH = os.path.join(config["model_training"]["save_trained_model_tflite_dir"],config["model_training"]["save_trained_model_tflite_name"]) 
 # Model input dimensions (H, W)
 MODEL_INPUT_HEIGHT = 256
 MODEL_INPUT_WIDTH = 256
