@@ -4,10 +4,14 @@ from stages.generate_dataset import GENERATE_DATA, create_dataset
 from stages.model_training import start_train
 from stages.configure_optimizer_metrices import func_configure_optimizer_metrics_checkpoints
 from utils.logger import get_logger
-from utils.common_functions import read_yaml
+from utils.common_functions import read_yaml, update_deployment_model_loss, save_trained_model
 from utils.train_val_function import train_step, val_step
 from utils.common_functions import convert_and_save_tflite
 import tensorflow as tf
+import yaml
+from datetime import datetime
+import os
+import json
 logger = get_logger(__name__)
 
 
@@ -18,14 +22,14 @@ logger.info("Done  --> Loading the yaml file")
 print("test commit")
 
 
-################################# Download the image data #################################
-logger.info(f"Start --> Data Ingestion ")
-download_data(
-    image_url = config["data_ingestion"]["image_url"] ,
-    destination = config["data_ingestion"]["destination_path"] ,
-    image_file_name = config["data_ingestion"]["image_file_name"]
-    )
-logger.info(f"Done --> Data Ingestion ")
+# ################################# Download the image data #################################
+# logger.info(f"Start --> Data Ingestion ")
+# download_data(
+#     image_url = config["data_ingestion"]["image_url"] ,
+#     destination = config["data_ingestion"]["destination_path"] ,
+#     image_file_name = config["data_ingestion"]["image_file_name"]
+#     )
+# logger.info(f"Done --> Data Ingestion ")
 
 
 # # ################################# Configure tenorflow to use GPU #################################
@@ -96,7 +100,7 @@ logger.info(f"Done --> Configuring the optimizer, metric and checkpoints")
 
 # # ################################# Start training  #################################
 logger.info(f"Start --> Training the Model")
-STUDENT_MODEL_NEW = start_train(
+STUDENT_MODEL_NEW, best_val_loss = start_train(
         EPOCHS = config["model_training"]["EPOCHS"],
         train_metric = train_metric,
         val_metric = val_metric,
@@ -113,23 +117,17 @@ STUDENT_MODEL_NEW = start_train(
 logger.info(f"Done --> Training the Model")
 
 
-# # ################################# saving the model  #################################
-logger.info(f"Start --> saving the model to path : {config['model_training']['save_trained_model_dir']}")
-STUDENT_MODEL_NEW.export(config['model_training']['save_trained_model_dir'])
-logger.info(f"Done --> saving the model : {config['model_training']['save_trained_model_dir']}")
+# ################################# saving the model  AND update deployed_model.json  #################################
+logger.info(f"Start --> Saving the model, deploy the best model")
+timestamp = save_trained_model(STUDENT_MODEL_NEW, best_val_loss)
+logger.info(f"Done --> Saving the model, deploy the best model")
+
+logger.info(f"Start --> Saving the best loss to main deployment config")
+TRAINED_MODEL_LOSS = best_val_loss
+update_deployment_model_loss(TRAINED_MODEL_LOSS, timestamp)
+logger.info(f"Done --> Saving the best loss to main deployment config")
 
 
-logger.info(f"Start --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")
-model_paht = convert_and_save_tflite(config["model_training"]['save_trained_model_dir'], config['model_training']['save_trained_model_tflite_dir'])
-logger.info(f"Done --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")
-
-
-
-
-
-
-
-
-
-
-
+# logger.info(f"Start --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")
+# model_paht = convert_and_save_tflite(config["model_training"]['save_trained_model_dir'], config['model_training']['save_trained_model_tflite_dir'])
+# logger.info(f"Done --> saving the tflite model to path : {config['model_training']['save_trained_model_tflite_dir']}")

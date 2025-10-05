@@ -7,7 +7,7 @@ teacher_model:
 data_generation:
   SOFTLABEL_DIR : "softlabels.h5"
 model_training:
-  EPOCHS : 1
+  EPOCHS : 4
   BATCH_SIZE : 10
   LEARNING_RATE : 3e-4
   LOG_INTERVAL : 10
@@ -18,5 +18,9 @@ model_training:
   TRAIN_VAL_SPLIT : 0.8
   save_trained_model_dir: "models_trained/"
   save_trained_model_tflite_dir : "models_trained_tflite/"
+  save_trained_model_tflite_name : "model.tflite"
+
+
+
   
   

@@ -1,0 +1,4 @@
+deploynment:
+  deploynment_model_path: models_deployed/
+  deploynment_model_loss: 288
+  timestamp: '20251005_154037'

@@ -46,6 +46,8 @@ def start_train(
         train_metric.reset_state() # reset train metric
         val_metric.reset_state()  # reset val metric 
         
+        #code to return the best val loss
+        best_val_loss = float('inf')
 
         # tqdm for progress bar
         pbar = tqdm(train_ds, desc=f"Epoch {epoch+1}/{EPOCHS}", unit="batch")
@@ -99,5 +101,9 @@ def start_train(
         current_lr = optimizer.learning_rate(epoch).numpy() if callable(optimizer.learning_rate) else optimizer.learning_rate.numpy()
         print(f"[INFO] Epoch {epoch+1} | LR = {current_lr:.6f}")
         print(f"Epoch {epoch+1}: Avg Train Loss = {train_metric.result():.4f} | Avg Val Loss = {val_metric.result():.4f}")
-    return STUDENT_MODEL
+        if int(val_metric.result())<best_val_loss:
+            best_val_loss = int(val_metric.result())
+    return STUDENT_MODEL, best_val_loss
+
+
     

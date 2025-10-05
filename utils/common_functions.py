@@ -11,6 +11,8 @@ import gdown
 import tensorflow as tf
 import h5py
 import numpy as np
+from datetime import datetime
+import json
 
 logger = get_logger(__name__)
 
@@ -165,21 +167,117 @@ def silog_loss(y_true, y_pred, mask=None, lam=0.85, eps=1e-6):
 
 
 def convert_and_save_tflite(model_dir, tflite_path):
-    # ✅ Point to the folder you got from model.export()
+    import os
+    import tensorflow as tf
+
     converter = tf.lite.TFLiteConverter.from_saved_model(model_dir)
-
-    # (Optional) Add optimization:
-    # converter.optimizations = [tf.lite.Optimize.DEFAULT]
-
-    # Convert:
     tflite_model = converter.convert()
 
-    
-    # Save it:
-    with open("model.tflite", "wb") as f:
+    # Ensure the output directory exists
+    os.makedirs(tflite_path, exist_ok=True)
+
+    tflite_path_model = os.path.join(tflite_path, "model.tflite")
+    with open(tflite_path_model, "wb") as f:
         f.write(tflite_model)
         logger.info(f"Saved the tflite model : model.tflite")
-    return "model.tflite"
+    return tflite_path_model
+
+def save_trained_model(STUDENT_MODEL_NEW, best_val_loss, config_file_path = "config/config.yaml"):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    config = read_yaml(config_file_path)
+    model_dir = config['model_training']['save_trained_model_dir']
+    model_name = f"model_{timestamp}.h5"
+    model_path = os.path.join(model_dir, model_name)
+
+    logger.info(f"Start --> saving the model to path : {model_path}")
+    STUDENT_MODEL_NEW.export(model_path)
+    logger.info(f"Done --> saving the model : {model_path}")
+
+    # ################################# update deployed_model.json  #################################
+
+    deploy_info = {
+        "model_path": model_path,
+        "loss": float(best_val_loss),
+        "timestamp": timestamp
+    }
+    deploy_json_path = os.path.join(model_dir, "deployed_model.json")
+
+    # Load existing deployments if file exists, else start a new list
+    if os.path.exists(deploy_json_path):
+        with open(deploy_json_path, "r") as f:
+            try:
+                deployments = json.load(f)
+                if not isinstance(deployments, list):
+                    deployments = [deployments]
+            except Exception:
+                deployments = []
+    else:
+        deployments = []
+
+    # Append new deployment info
+    deployments.append(deploy_info)
+
+    # Save all deployments back to the file
+    with open(deploy_json_path, "w") as f:
+        json.dump(deployments, f, indent=2)
+    logger.info(f"Updated deployed_model.json at {deploy_json_path}")
+    return timestamp
+
+
+
+def update_deployment_model_loss(TRAINED_MODEL_LOSS, timestamp, config_path="config/deployment_config.yaml"):
+    """
+    Update deployment YAML file with the best loss and timestamp.
+    Also, load the best model using the timestamp and save its TFLite version.
+    """
+    import json
+
+    # 1. Read existing YAML config
+    with open(config_path, 'r') as file:
+        config = yaml.safe_load(file)
+
+    # 2. Show current value to user
+    DEPLOYED_MODEL_LOSS = config.get("deploynment", {}).get("deploynment_model_loss", None)
+    print(f"Current deploynment_model_loss: {DEPLOYED_MODEL_LOSS}")
+
+    if TRAINED_MODEL_LOSS < DEPLOYED_MODEL_LOSS:
+        # 3. Update the YAML structure
+        if "deploynment" not in config:
+            config["deploynment"] = {}
+        config["deploynment"]["deploynment_model_loss"] = TRAINED_MODEL_LOSS
+        config["deploynment"]["timestamp"] = timestamp
+
+        # 4. Write the updated config back to file
+        with open(config_path, 'w') as file:
+            yaml.safe_dump(config, file, sort_keys=False)
+        print(f"✅ Updated deploynment_model_loss to {TRAINED_MODEL_LOSS} in {config_path}")
+
+        # 5. Load the best model path from deployed_model.json using timestamp
+        #    (Assume deployed_model.json is in the deployed model directory)
+        config_main = read_yaml("config/config.yaml")
+        model_dir = config_main['model_training']['save_trained_model_dir']
+        deployed_json_path = os.path.join(model_dir, "deployed_model.json")
+        best_model_path = None
+        if os.path.exists(deployed_json_path):
+            with open(deployed_json_path, "r") as f:
+                deployments = json.load(f)
+                for entry in deployments:
+                    if entry.get("timestamp") == timestamp:
+                        best_model_path = entry.get("model_path")
+                        break
+
+        if best_model_path is None:
+            print(f"Could not find model with timestamp {timestamp} in {deployed_json_path}")
+            return
+
+        # 6. Save the TFLite version of the best model
+        tflite_dir = config_main['model_training']['save_trained_model_tflite_dir']
+        model_paht = convert_and_save_tflite(best_model_path, tflite_dir)
+        print(f"Saved TFLite model at: {model_paht}")
+    else:
+        print("No update: the current model is the best model")
+    
+# update_deployment_model_loss("config/config.yaml")
 # def load_data(path):
 #         """
 #         function to load the data from a given path

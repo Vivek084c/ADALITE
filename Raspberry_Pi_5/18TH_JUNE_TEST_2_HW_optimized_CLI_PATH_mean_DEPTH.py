@@ -21,6 +21,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import subprocess
 
+#function to read the yaml file
+from utils.common_functions import read_yaml
+config = read_yaml("config/config.yaml")
+
 # ======================================================================================
 # FrameBuffer Display Class for Console-based Real-Time Output
 # ======================================================================================
@@ -79,7 +83,9 @@ def cleanup_handler(signum=None, frame=None):
         running = False
 
 # Configuration
-MODEL_PATH = "ADALITE_TFLITE.tflite"
+#get the model path
+MODEL_PATH = os.path.join(config["model_training"]["save_trained_model_tflite_dir"],config["model_training"]["save_trained_model_tflite_name"]) 
+# MODEL_PATH = "ADALITE_TFLITE.tflite"
 MODEL_INPUT_HEIGHT = 256
 MODEL_INPUT_WIDTH = 256
 DISPLAY_WIDTH_SINGLE = 256
