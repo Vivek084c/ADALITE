@@ -33,7 +33,7 @@ The training phase uses knowledge distillation to create an efficient student mo
 6. **Model Export**: Exports trained model to TFLite format for deployment.
 
 ### Deployment Pipeline (Real-Time Inference)
-The deployment script (`Raspberry_Pi_5/18TH_JUNE_TEST_1_NO_HW.py`) handles real-time processing:
+The deployment script (`Raspberry_Pi_5/TEST_2_HW_optimized_CLI_path_mean_depth_in_roi.py`) handles real-time processing:
 
 1. **Camera Capture**: Uses Picamera2 to capture RGB frames at 640x480, cropped to square.
 2. **Preprocessing**: Resizes to 256x256, normalizes with ImageNet mean/std.
@@ -41,6 +41,7 @@ The deployment script (`Raspberry_Pi_5/18TH_JUNE_TEST_1_NO_HW.py`) handles real-
 4. **Postprocessing**: Aligns depth map with calibration constants (m, c).
 5. **Visualization**: Generates matplotlib plots with depth points overlay.
 6. **Display**: Renders combined original + depth image on Linux framebuffer.
+7. **Alert**: Calculates aligned mean depth in a Region of Interest and handles GPIO based alerts.
 
 ---
 
