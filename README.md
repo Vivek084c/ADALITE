@@ -10,6 +10,8 @@ ADALITE is an end-to-end deep learning pipeline for **real-time monocular depth 
 
 The system captures live video from the Raspberry Pi Camera Module 3, performs depth estimation using a TensorFlow Lite model, and displays the results directly on the Linux framebuffer for real-time visualization. This project was developed as part of the **CATERPILLAR TECH CHALLENGE 2025**, where it secured a winning position.
 
+[WINNERS CATERPILLAR TECH CHALLENGE 2025](https://www.linkedin.com/posts/shwetank-shekhar-002b9b203_caterpillartechchallenge-caterpillar100-rtos-activity-7357453575540658177-fU2y?utm_source=share&utm_medium=member_desktop&rcm=ACoAADP3l0IB_pF2cEhbDCVtuh9m-Vzfyl9vxcI)
+
 ### Key Achievements
 - **Real-Time Performance**: Achieves ~10-15 FPS on Raspberry Pi 5 with deterministic latency (<200µs under load).
 - **Edge-Optimized**: Uses TensorFlow Lite for efficient inference on ARM64 architecture.
@@ -172,7 +174,7 @@ sudo reboot
 Navigate to the Raspberry Pi 5 directory and execute the script:
 ```bash
 cd Raspberry_Pi_5
-python3 18TH_JUNE_TEST_1_NO_HW.py
+python3 TEST_1_NO_HW.py
 ```
 
 - **Controls**: Press `Ctrl+C` for graceful shutdown.
@@ -244,8 +246,31 @@ cyclictest -Sp90 -i200 -n -l100000  # Latency test (<200µs expected)
 
 ---
 
-## Contributing
-Contributions are welcome! Please refer to the PixelPac repository for development guidelines and submit pull requests for improvements.
+## Contributing:
+
+### VIVEK CHOUDHRY:[GitHub](https://github.com/Vivek084c)
+* Trained various hybrid models based on references from Adabins and DepthAnythingV2
+* Depth Estimation Model : CNN based model with MULTI HEAD ATTENTION trained with KNOWLEDGE DISTILATION
+* CI/CD Deployment : GITHUB AND DOCKER
+
+### SHWETANK SHEKHAR:[GitHub](https://github.com/ShekharShwetank)
+* Successfully built, configured, and deployed a custom 6.15.0-rc7 PREEMPT_RT kernel specifically for the Raspberry Pi 5 platform.
+* Configured advanced kernel parameters for real-time performance, including NO_HZ_FULL, a 1000 Hz timer, the performance CPU
+governor, and PPS/NTP support features.
+* Architected the complete inference pipeline that integrates pi camera input, GPIO-based visual and audio alerts, and live visual feedback on
+an HDMI display in Console Log Environment.
+
+### RATISH R.A:
+* Curated and preprocessed a 50GB KITTI subset with ground truth depth for scalable training.
+* Built a multi-process, memory-efficient pipeline for real-time knowledge distillation.
+* Designed and integrated a lightweight MobileNet-based encoder-decoder with a 64-bin AdaBins module for accurate and efficient monocular
+depth estimation.
+
+### AMRIT S S:
+* 3D CAD Design for Hardware Mounting. Ran fitment simulations to validate heat clearance.
+* Performed Air circulation trajectories for best cooling.
+
+#### Contributions are welcome! Please refer to the [PixelPac](https://github.com/ShekharShwetank/PixelPac) repository for development guidelines and submit pull requests for improvements.
 
 ---
 
