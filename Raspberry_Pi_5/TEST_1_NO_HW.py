@@ -135,7 +135,7 @@ def main():
     signal.signal(signal.SIGINT, cleanup_handler)
     signal.signal(signal.SIGTERM, cleanup_handler)
 
-    #m, c = (-0.34858393669128426, 11.856438636779785) # Constants from your original script
+    #m, c = (-0.34858393669128426, 11.856438636779785) # Constants from original script
     m, c = (-0.37965089082717896, 14.945058822631836)
     num_points_per_axis = 6
 
